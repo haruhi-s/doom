@@ -36,7 +36,7 @@
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
 ;; (setq doom-theme 'doom-horizon)
-(setq doom-theme 'doom-vibrant)
+(setq doom-theme 'doom-nord)
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq-default indent-tabs-mode nil)
@@ -160,18 +160,26 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
-;; input method
-(require 'pyim)
-(setq pyim-page-length 5)
-(pyim-default-scheme 'microsoft-shuangpin)
-(global-set-key (kbd "M-i") 'pyim-deactivate)
-(global-set-key (kbd "M-o") 'pyim-activate)
-(define-key pyim-mode-map "." #'pyim-next-page)
-(define-key pyim-mode-map "," #'pyim-previous-page)
-(setq-default pyim-punctuation-translate-p '(no))
+;; subwords
+(use-package subword
+  :config
+  (global-subword-mode 't))
 
-(require 'pyim-basedict)
-(pyim-basedict-enable)
+;; IM
+(use-package pyim
+  :config
+  (setq pyim-page-length 5)
+  (pyim-default-scheme 'microsoft-shuangpin)
+  (global-set-key (kbd "M-i") 'pyim-deactivate)
+  (global-set-key (kbd "M-o") 'pyim-activate)
+  (define-key pyim-mode-map "." #'pyim-next-page)
+  (define-key pyim-mode-map "," #'pyim-previous-page)
+  (setq-default pyim-punctuation-translate-p '(no))
+  )
+
+(use-package pyim-basedict
+  :config
+  (pyim-basedict-enable))
 
 ;; telega
 (add-hook 'telega-load-hook
