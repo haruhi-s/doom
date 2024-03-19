@@ -24,7 +24,8 @@
 ;; See 'C-h v doom-font' for documentation and more examples of what they
 ;; accept. For example:
 ;;
-(setq doom-font (font-spec :family "Cascadia Code" :size 13))
+
+(setq doom-font (font-spec :family "Cascadia Code" :size 15))
 ;;      doom-variable-pitch-font (font-spec :family "Cascadia Code SemiBold" :size 30))
 ;;
 ;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
@@ -36,7 +37,7 @@
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
 ;; (setq doom-theme 'doom-horizon)
-(setq doom-theme 'doom-nord)
+(setq doom-theme 'doom-vibrant)
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq-default indent-tabs-mode nil)
@@ -56,7 +57,11 @@
 
 (setq kill-whole-line t)
 (add-hook 'python-mode-hook (lambda () (setq forward-sexp-function nil)))
-(global-set-key (kbd "M-t") 'org-todo)
+
+(global-set-key (kbd "C-c C-t C-t") 'telega)
+(global-set-key (kbd "C-c C-t t") 'telega)
+
+(global-set-key (kbd "M-t") 'swiper-thing-at-point)
 (global-set-key (kbd "M-i") 'lsp-find-definition)
 (global-set-key (kbd "C-h") 'backward-delete-char-untabify)
 (global-set-key (kbd "C-a") 'beginning-of-visual-line)
@@ -175,6 +180,9 @@
   (define-key pyim-mode-map "." #'pyim-next-page)
   (define-key pyim-mode-map "," #'pyim-previous-page)
   (setq-default pyim-punctuation-translate-p '(no))
+  (setq-default pyim-pinyin-fuzzy-alist '())
+  (require 'popup)
+  (setq pyim-page-tooltip 'popup)
   )
 
 (use-package pyim-basedict
@@ -185,6 +193,7 @@
 (add-hook 'telega-load-hook
           (lambda ()
             (define-key global-map (kbd "C-c t") telega-prefix-map)))
+(setq telega-avatar-workaround-gaps-for '(return t))
 
 (use-package composite
   :defer t
