@@ -166,7 +166,7 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
-;; subwords
+;; subwords for CamelCase
 (use-package subword
   :config
   (global-subword-mode 't))
@@ -195,6 +195,14 @@
           (lambda ()
             (define-key global-map (kbd "C-c t") telega-prefix-map)))
 (setq telega-avatar-workaround-gaps-for '(return t))
+
+;; lisp
+
+(use-package slime
+  :config
+  (setq inferior-lisp-program "sbcl")
+  (slime-setup '(slime-company slime-fancy slime-quicklisp slime-asdf slime-media slime-parse slime-mrepl))
+  )
 
 (use-package composite
   :defer t

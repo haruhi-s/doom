@@ -26,6 +26,7 @@
 (package! telega)
 (package! subword)
 (package! slime)
+(package! slime-company)
 (package! paredit)
 
 ;; To install a package directly from a remote git repo, you must specify a
