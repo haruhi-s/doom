@@ -25,7 +25,7 @@
 ;; accept. For example:
 ;;
 
-(setq doom-font (font-spec :family "Cascadia Code" :size 15))
+(setq doom-font (font-spec :family "Cascadia Code" :size 28))
 ;;      doom-variable-pitch-font (font-spec :family "Cascadia Code SemiBold" :size 30))
 ;;
 ;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
@@ -91,11 +91,22 @@
 (bind-key* "M-m b n" 'next-buffer)
 (bind-key* "M-m b w" 'read-only-mode)
 
-(add-hook 'prog-mode-hook (lambda ()
-                            (local-set-key (kbd "M-p") 'backward-paragraph)
-                            (local-set-key (kbd "M-n") 'forward-paragraph)
-                            (local-set-key (kbd "M-r") 'replace-string)
-                            ))
+(defun my-smartparens-hook ()
+  (define-key smartparens-mode-map (kbd "C-M-f") nil)
+  (define-key smartparens-mode-map (kbd "C-M-b") nil)
+)
+(add-hook 'smartparens-mode-hook 'my-smartparens-hook)
+
+(add-hook 'prog-mode-hook
+          (lambda ()
+            (local-set-key (kbd "M-p") 'backward-paragraph)
+            (local-set-key (kbd "M-n") 'forward-paragraph)
+            (local-set-key (kbd "M-r") 'replace-string)
+            ))
+
+(add-hook 'haskell-interactive-mode-hook
+          (lambda ()
+            (local-set-key (kbd "C-a") 'haskell-interactive-mode-beginning)))
 
 (bind-key* "C-M-p" 'backward-paragraph)
 (bind-key* "C-M-n" 'forward-paragraph)
