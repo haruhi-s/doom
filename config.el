@@ -91,18 +91,26 @@
 (bind-key* "M-m b n" 'next-buffer)
 (bind-key* "M-m b w" 'read-only-mode)
 
-(defun my-smartparens-hook ()
-  (define-key smartparens-mode-map (kbd "C-M-f") nil)
-  (define-key smartparens-mode-map (kbd "C-M-b") nil)
-)
-(add-hook 'smartparens-mode-hook 'my-smartparens-hook)
+(add-hook 'slime-mode-hook
+          (lambda ()
+            (define-key slime-mode-map (kbd "C-M-a") 'slime-beginning-of-defun)
+            (define-key slime-mode-map (kbd "C-M-e") 'slime-end-of-defun)
+            (define-key slime-mode-map (kbd "M-p") 'backward-paragraph)
+            (define-key slime-mode-map (kbd "M-n") 'forward-paragraph)
+            ))
+
+(add-hook 'smartparens-mode-hook
+          (lambda ()
+            (define-key smartparens-mode-map (kbd "C-M-a") nil)
+            (define-key smartparens-mode-map (kbd "C-M-e") nil)
+            (define-key smartparens-mode-map (kbd "C-M-f") nil)
+            (define-key smartparens-mode-map (kbd "C-M-b") nil)))
 
 (add-hook 'prog-mode-hook
           (lambda ()
             (local-set-key (kbd "M-p") 'backward-paragraph)
             (local-set-key (kbd "M-n") 'forward-paragraph)
-            (local-set-key (kbd "M-r") 'replace-string)
-            ))
+            (local-set-key (kbd "M-r") 'replace-string)))
 
 (add-hook 'haskell-interactive-mode-hook
           (lambda ()
