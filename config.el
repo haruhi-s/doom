@@ -201,14 +201,14 @@
   (define-key pyim-mode-map "," #'pyim-previous-page)
   (setq-default pyim-punctuation-translate-p '(no))
   (setq-default pyim-pinyin-fuzzy-alist '())
-  (setq-default pyim-candidates-search-buffer-p nil)
+  (setq-default pyim-enable-shortcode nil)
   (require 'popup)
   (setq pyim-page-tooltip 'popup)
-  (setq-default pyim-enable-shortcode nil)
   )
 
 (use-package vterm
   :config
+  (global-set-key (kbd "M-t") 'vterm)
   (define-key vterm-mode-map (kbd "C-c C-j") 'vterm-copy-mode)
   (define-key vterm-copy-mode-map (kbd "C-c C-k") 'vterm-copy-mode)
 )
