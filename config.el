@@ -208,7 +208,15 @@
 
 (use-package vterm
   :config
-  (global-set-key (kbd "M-t") 'vterm)
+  (define-key vterm-mode-map (kbd "C-c C-j") 'vterm-copy-mode)
+  (define-key vterm-copy-mode-map (kbd "C-c C-k") 'vterm-copy-mode)
+)
+
+(use-package multi-vterm
+  :config
+  (bind-key* (kbd "M-t M-t") 'multi-vterm) ;
+  (bind-key* (kbd "M-t M-p") 'multi-vterm-prev)
+  (bind-key* (kbd "M-t M-n") 'multi-vterm-next)
   (define-key vterm-mode-map (kbd "C-c C-j") 'vterm-copy-mode)
   (define-key vterm-copy-mode-map (kbd "C-c C-k") 'vterm-copy-mode)
 )
