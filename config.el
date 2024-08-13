@@ -57,21 +57,34 @@
 (setq org-directory "~/org/")
 
 (setq kill-whole-line t)
-(add-hook 'python-mode-hook (lambda () (setq forward-sexp-function nil)))
 
-(global-set-key (kbd "C-c C-t C-t") 'telega)
-(global-set-key (kbd "C-c C-t t") 'telega)
-
-(global-set-key (kbd "M-t") 'swiper-thing-at-point)
-(global-set-key (kbd "M-i") 'lsp-find-definition)
 (global-set-key (kbd "C-h") 'backward-delete-char-untabify)
 (global-set-key (kbd "C-a") 'beginning-of-visual-line)
 (global-set-key (kbd "C-e") 'end-of-visual-line)
-(global-set-key (kbd "C-s") 'swiper-isearch)
-(global-set-key (kbd "C-r") 'swiper-isearch-backward)
-(bind-key* "M-m b s" 'doom/open-scratch-buffer)
-
 (global-visual-line-mode 't)
+
+(add-hook 'python-mode-hook (lambda () (setq forward-sexp-function nil)))
+
+;; telega
+(global-set-key (kbd "C-c C-t C-t") 'telega)
+(global-set-key (kbd "C-c C-t t") 'telega)
+(setq telega-avatar-workaround-gaps-for '(return t))
+(setq telega-accounts '(("tomato" telega-database-dir "/home/a/.telega")
+                        ("potata" telega-database-dir "/home/a/.potata")))
+(add-hook 'telega-load-hook
+          (lambda ()
+            (define-key global-map (kbd "C-c t") telega-prefix-map)))
+
+(use-package swiper
+  :config
+  (global-set-key (kbd "M-t") 'swiper-thing-at-point)
+  (global-set-key (kbd "C-s") 'swiper-isearch)
+  (global-set-key (kbd "C-r") 'swiper-isearch-backward)
+  )
+
+
+(bind-key* "M-m b s" 'scratch-buffer)
+
 (winum-mode)
 (bind-key* "M-m w d" 'delete-window)
 (bind-key* "M-m w /" 'split-window-horizontally)
@@ -82,14 +95,19 @@
 (bind-key* "M-4" 'winum-select-window-4)
 (bind-key* "M-5" 'winum-select-window-5)
 
-;; (bind-key* "M-m b b" 'ido-switch-buffer)
-;; (bind-key* "M-m b b" 'counsel-buffer-or-recentf)
 (setq-default ivy-use-virtual-buffers t)
 (bind-key* "M-m b b" 'ivy-switch-buffer)
 (bind-key* "M-m b d" 'kill-this-buffer)
 (bind-key* "M-m b p" 'previous-buffer)
 (bind-key* "M-m b n" 'next-buffer)
 (bind-key* "M-m b w" 'read-only-mode)
+
+(add-hook 'lisp-mode-hook 'paredit-mode)
+(add-hook 'lisp-mode-hook 'rainbow-delimiters-mode)
+(add-hook 'lisp-mode-hook (lambda () (smartparens-mode -1)))
+
+(add-hook 'emacs-lisp-mode-hook 'paredit-mode)
+(add-hook 'emacs-lisp-mode-hook (lambda () (smartparens-mode -1)))
 
 (add-hook 'slime-mode-hook
           (lambda ()
@@ -106,11 +124,9 @@
             (define-key smartparens-mode-map (kbd "C-M-f") nil)
             (define-key smartparens-mode-map (kbd "C-M-b") nil)))
 
-(add-hook 'prog-mode-hook
-          (lambda ()
-            (local-set-key (kbd "M-p") 'backward-paragraph)
-            (local-set-key (kbd "M-n") 'forward-paragraph)
-            (local-set-key (kbd "M-r") 'replace-string)))
+(define-key prog-mode-map (kbd "M-R") 'replace-string)
+(define-key prog-mode-map (kbd "M-n") 'forward-paragraph)
+(define-key prog-mode-map (kbd "M-p") 'backward-paragraph)
 
 (add-hook 'haskell-interactive-mode-hook
           (lambda ()
@@ -225,14 +241,7 @@
   :config
   (pyim-basedict-enable))
 
-;; telega
-(add-hook 'telega-load-hook
-          (lambda ()
-            (define-key global-map (kbd "C-c t") telega-prefix-map)))
-(setq telega-avatar-workaround-gaps-for '(return t))
-
 ;; lisp
-
 (use-package slime
   :config
   (setq inferior-lisp-program "sbcl")
