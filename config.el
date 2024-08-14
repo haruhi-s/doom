@@ -25,7 +25,7 @@
 ;; accept. For example:
 ;;
 
-(setq doom-font (font-spec :family "Cascadia Code" :size 28))
+(setq doom-font (font-spec :family "Cascadia Code" :size 24))
 ;;      doom-variable-pitch-font (font-spec :family "Cascadia Code SemiBold" :size 30))
 ;;
 ;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
@@ -107,14 +107,18 @@
 (add-hook 'lisp-mode-hook (lambda () (smartparens-mode -1)))
 
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
+(add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
 (add-hook 'emacs-lisp-mode-hook (lambda () (smartparens-mode -1)))
 
-(add-hook 'slime-mode-hook
-          (lambda ()
-            (define-key slime-mode-map (kbd "C-M-a") 'slime-beginning-of-defun)
-            (define-key slime-mode-map (kbd "C-M-e") 'slime-end-of-defun)
-            (define-key slime-mode-map (kbd "M-p") 'backward-paragraph)
-            (define-key slime-mode-map (kbd "M-n") 'forward-paragraph)
+(define-key slime-mode-map (kbd "C-M-a") 'slime-beginning-of-defun)
+(define-key slime-mode-map (kbd "C-M-e") 'slime-end-of-defun)
+(define-key slime-mode-map (kbd "M-p") 'backward-paragraph)
+(define-key slime-mode-map (kbd "M-n") 'forward-paragraph)
+
+(add-hook 'slime-repl-mode-hook (lambda ()
+            (smartparens-mode -1)
+            (paredit-mode t)
+            (rainbow-delimiters-mode t)
             ))
 
 (add-hook 'smartparens-mode-hook
