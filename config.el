@@ -70,7 +70,8 @@
 (global-set-key (kbd "C-c C-t t") 'telega)
 (setq telega-avatar-workaround-gaps-for '(return t))
 (setq telega-accounts '(("tomato" telega-database-dir "/home/a/.telega")
-                        ("potata" telega-database-dir "/home/a/.potata")))
+                        ("potata" telega-database-dir "/home/a/.potata")
+                        ("tomatoin" telega-database-dir "/home/a/.tomatoin")))
 (add-hook 'telega-load-hook
           (lambda ()
             (define-key global-map (kbd "C-c t") telega-prefix-map)))
@@ -226,11 +227,22 @@
   (setq pyim-page-tooltip 'popup)
   )
 
+
 (use-package vterm
+  :bind
+  (:map vterm-mode-map
+   ("C-c C-j" . vterm-copy-mode)
+   ("C-q" . vterm-send-next-key)
+   ("C-k" . vterm-send-Ck)
+   :map vterm-copy-mode-map
+   ("C-c C-k" . (lambda () (interactive) (vterm-copy-mode -1))))
   :config
-  (define-key vterm-mode-map (kbd "C-c C-j") 'vterm-copy-mode)
-  (define-key vterm-copy-mode-map (kbd "C-c C-k") 'vterm-copy-mode)
-)
+  (setq vterm-max-scrollback 1000000)
+  (defun vterm-send-Ck ()
+    "Send `C-k' to libvterm."
+    (interactive)
+    (kill-ring-save (point) (vterm-end-of-line))
+    (vterm-send-key "k" nil nil t)))
 
 (use-package multi-vterm
   :config
@@ -239,7 +251,7 @@
   (bind-key* (kbd "M-t M-n") 'multi-vterm-next)
   (define-key vterm-mode-map (kbd "C-c C-j") 'vterm-copy-mode)
   (define-key vterm-copy-mode-map (kbd "C-c C-k") 'vterm-copy-mode)
-)
+  )
 
 (use-package pyim-basedict
   :config
