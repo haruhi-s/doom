@@ -25,8 +25,8 @@
 ;; accept. For example:
 ;;
 
-(setq doom-font (font-spec :family "Cascadia Code" :size 24))
-;;      doom-variable-pitch-font (font-spec :family "Cascadia Code SemiBold" :size 30))
+(setq doom-font (font-spec :family "Cascadia Code" :size 26))
+;; doom-variable-pitch-font (font-spec :family "Cascadia Code SemiBold" :size 30))
 ;;
 ;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
 ;; up, `M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
@@ -83,6 +83,11 @@
   (global-set-key (kbd "C-r") 'swiper-isearch-backward)
   )
 
+(use-package image
+  :config
+  (define-key image-mode-map (kbd "=") 'image-increase-size)
+  (define-key image-mode-map (kbd "-") 'image-decrease-size)
+  )
 
 (bind-key* "M-m b s" 'scratch-buffer)
 
@@ -110,11 +115,6 @@
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
 (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
 (add-hook 'emacs-lisp-mode-hook (lambda () (smartparens-mode -1)))
-
-(define-key slime-mode-map (kbd "C-M-a") 'slime-beginning-of-defun)
-(define-key slime-mode-map (kbd "C-M-e") 'slime-end-of-defun)
-(define-key slime-mode-map (kbd "M-p") 'backward-paragraph)
-(define-key slime-mode-map (kbd "M-n") 'forward-paragraph)
 
 (add-hook 'slime-repl-mode-hook (lambda ()
             (smartparens-mode -1)
@@ -227,7 +227,6 @@
   (setq pyim-page-tooltip 'popup)
   )
 
-
 (use-package vterm
   :bind
   (:map vterm-mode-map
@@ -262,6 +261,10 @@
   :config
   (setq inferior-lisp-program "sbcl")
   (slime-setup '(slime-company slime-fancy slime-quicklisp slime-asdf slime-media slime-parse slime-mrepl))
+  (define-key slime-mode-map (kbd "C-M-a") 'slime-beginning-of-defun)
+  (define-key slime-mode-map (kbd "C-M-e") 'slime-end-of-defun)
+  (define-key slime-mode-map (kbd "M-p") 'backward-paragraph)
+  (define-key slime-mode-map (kbd "M-n") 'forward-paragraph)
   )
 
 (use-package composite
