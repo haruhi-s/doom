@@ -38,7 +38,7 @@
 ;; `load-theme' function. This is the default:
 ;; (setq doom-theme 'doom-horizon)
 
-(setq doom-theme 'doom-vibrant)
+(setq doom-theme 'doom-gruvbox)
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq-default indent-tabs-mode nil)

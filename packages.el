@@ -10,7 +10,6 @@
 ;(package! some-package)
 (package! winum)
 (package! clang-format)
-(package! vscode-dark-plus-theme)
 (package! swiper)
 (package! counsel)
 (package! smex)
