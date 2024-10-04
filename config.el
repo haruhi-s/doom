@@ -307,6 +307,7 @@
     (set-char-table-parent composition-ligature-table composition-function-table))
   )
 
-(require 'image-mode)
-(define-key image-mode-map (kbd "=") 'image-increase-size)
-(define-key image-mode-map (kbd "-") 'image-decrease-size)
+(use-package image-mode
+  :config
+  (define-key image-mode-map (kbd "=") 'image-increase-size)
+  (define-key image-mode-map (kbd "-") 'image-decrease-size))
