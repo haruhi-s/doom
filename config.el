@@ -83,12 +83,6 @@
   (global-set-key (kbd "C-r") 'swiper-isearch-backward)
   )
 
-(use-package image
-  :config
-  (define-key image-mode-map (kbd "=") 'image-increase-size)
-  (define-key image-mode-map (kbd "-") 'image-decrease-size)
-  )
-
 (bind-key* "M-m b s" 'scratch-buffer)
 
 (winum-mode)
@@ -312,3 +306,7 @@
                               `([,(cdr char-regexp) 0 font-shape-gstring]))))
     (set-char-table-parent composition-ligature-table composition-function-table))
   )
+
+(require 'image-mode)
+(define-key image-mode-map (kbd "=") 'image-increase-size)
+(define-key image-mode-map (kbd "-") 'image-decrease-size)
