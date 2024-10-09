@@ -96,7 +96,9 @@
 (bind-key* "M-5" 'winum-select-window-5)
 
 (setq-default ivy-use-virtual-buffers t)
+(bind-key* "C-x C-b" 'ivy-switch-buffer)
 (bind-key* "M-m b b" 'ivy-switch-buffer)
+(bind-key* "M-m M-b" 'ibuffer)
 (bind-key* "M-m b d" 'kill-this-buffer)
 (bind-key* "M-m b p" 'previous-buffer)
 (bind-key* "M-m b n" 'next-buffer)
@@ -110,18 +112,19 @@
 (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
 (add-hook 'emacs-lisp-mode-hook (lambda () (smartparens-mode -1)))
 
-(add-hook 'slime-repl-mode-hook (lambda ()
+(add-hook 'slime-repl-mode-hook
+          (lambda ()
             (smartparens-mode -1)
             (paredit-mode t)
             (rainbow-delimiters-mode t)
             ))
 
-(add-hook 'smartparens-mode-hook
+(add-hook 'inferior-scheme-mode-hook
           (lambda ()
-            (define-key smartparens-mode-map (kbd "C-M-a") nil)
-            (define-key smartparens-mode-map (kbd "C-M-e") nil)
-            (define-key smartparens-mode-map (kbd "C-M-f") nil)
-            (define-key smartparens-mode-map (kbd "C-M-b") nil)))
+            (smartparens-mode -1)
+            (paredit-mode t)
+            (rainbow-delimiters-mode t)
+            ))
 
 (define-key prog-mode-map (kbd "M-R") 'replace-string)
 (define-key prog-mode-map (kbd "M-n") 'forward-paragraph)
