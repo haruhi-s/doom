@@ -58,6 +58,7 @@
 
 (setq kill-whole-line t)
 
+(global-set-key (kbd "M-w") 'copy-all-or-region)
 (global-set-key (kbd "C-h") 'backward-delete-char-untabify)
 (global-set-key (kbd "C-a") 'beginning-of-visual-line)
 (global-set-key (kbd "C-e") 'end-of-visual-line)
@@ -166,7 +167,6 @@
     (progn
       (kill-new (buffer-string))
       (message "Copied buffer."))))
-(global-set-key (kbd "M-w") 'copy-all-or-region)
 
 (after! flycheck
   (setq flycheck-global-modes '(not c-mode c++-mode)))
