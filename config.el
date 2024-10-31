@@ -103,10 +103,14 @@
 (bind-key* "M-m b d" 'kill-this-buffer)
 (bind-key* "M-m b p" 'previous-buffer)
 (bind-key* "M-m b n" 'next-buffer)
+(bind-key* "M-m M-p" 'previous-buffer)
+(bind-key* "M-m M-n" 'next-buffer)
+(bind-key* "M-m M-d" 'kill-this-buffer)
 (bind-key* "M-m b w" 'read-only-mode)
 
 (add-hook 'lisp-mode-hook 'paredit-mode)
 (add-hook 'lisp-mode-hook 'rainbow-delimiters-mode)
+(add-hook 'lisp-mode-hook 'auto-highlight-symbol-mode)
 (add-hook 'lisp-mode-hook (lambda () (smartparens-mode -1)))
 
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
@@ -152,8 +156,7 @@
 (defun save-and-format-buffer ()
   (interactive)
   (clang-format-buffer)
-  (save-buffer)
-  )
+  (save-buffer))
 (add-hook 'c++-mode-hook
           (lambda () (local-set-key (kbd "C-x C-s") 'save-and-format-buffer)))
 
