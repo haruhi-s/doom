@@ -31,6 +31,7 @@
 (package! emms)
 (package! vterm)
 (package! multi-vterm)
+(package! slime)
 (package! slime-company)
 
 ;; To install a package directly from a remote git repo, you must specify a

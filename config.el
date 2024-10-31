@@ -256,10 +256,16 @@
   :config
   (pyim-basedict-enable))
 
+;; company
+(use-package company
+  :config
+  (setf (cdr (assoc 'prog-mode +company-backend-alist)) '(company-capf)))
+
 ;; lisp
 (use-package slime
   :config
-  (setq inferior-lisp-program "sbcl")
+  ;; (setq-default company-backends (cons 'company-slime (remove 'company-slime company-backends)))
+  (setq-default inferior-lisp-program "sbcl")
   (slime-setup '(slime-company slime-fancy slime-quicklisp slime-asdf slime-media slime-parse slime-mrepl))
   (define-key slime-mode-map (kbd "C-M-a") 'slime-beginning-of-defun)
   (define-key slime-mode-map (kbd "C-M-e") 'slime-end-of-defun)
