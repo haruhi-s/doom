@@ -58,6 +58,17 @@
 
 (setq kill-whole-line t)
 
+(defun copy-all-or-region ()
+  (interactive)
+  (if (use-region-p)
+      (progn
+        (kill-new (buffer-substring (region-beginning) (region-end)))
+        (message "Copied selection.")
+        (deactivate-mark))
+    (progn
+      (kill-new (buffer-string))
+      (message "Copied buffer."))))
+
 (global-set-key (kbd "M-w") 'copy-all-or-region)
 (global-set-key (kbd "C-h") 'backward-delete-char-untabify)
 (global-set-key (kbd "C-a") 'beginning-of-visual-line)
@@ -108,30 +119,32 @@
 (bind-key* "M-m M-d" 'kill-this-buffer)
 (bind-key* "M-m b w" 'read-only-mode)
 
-(add-hook 'lisp-mode-hook 'paredit-mode)
-(add-hook 'lisp-mode-hook 'rainbow-delimiters-mode)
-(add-hook 'lisp-mode-hook 'auto-highlight-symbol-mode)
-(add-hook 'lisp-mode-hook (lambda () (smartparens-mode -1)))
+(use-package paredit
+  :config
+  (define-key paredit-mode-map (kbd "C-j") ())
+  (define-key paredit-mode-map (kbd "C-h") 'paredit-backward-delete))
 
-(add-hook 'emacs-lisp-mode-hook 'paredit-mode)
-(add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
-(add-hook 'emacs-lisp-mode-hook (lambda () (smartparens-mode -1)))
+(defun u-lisp-config ()
+  (smartparens-mode -1)
+  (flycheck-mode -1)
+  (paredit-mode t)
+  (paren-face-mode t)
+  (rainbow-delimiters-mode -1))
 
-(add-hook 'slime-repl-mode-hook
-          (lambda ()
-            (smartparens-mode -1)
-            (paredit-mode t)
-            (rainbow-delimiters-mode t)
-            ))
+(defun u-minibuffer-setup ()
+  (when (memq this-command '(eval-expression))
+    (u-lisp-config)))
 
-(add-hook 'inferior-scheme-mode-hook
-          (lambda ()
-            (smartparens-mode -1)
-            (paredit-mode t)
-            (rainbow-delimiters-mode t)
-            ))
+(add-hook 'minibuffer-setup-hook 'u-minibuffer-setup)
+(add-hook 'lisp-mode-hook 'u-lisp-config)
+(add-hook 'emacs-lisp-mode-hook 'u-lisp-config)
+(add-hook 'slime-mode-hook 'u-lisp-config)
+(add-hook 'inferior-scheme-mode-hook 'u-lisp-config)
+
+(define-key emacs-lisp-mode-map (kbd "C-j") 'eval-print-last-sexp)
 
 (define-key prog-mode-map (kbd "M-R") 'replace-string)
+(define-key prog-mode-map (kbd "C-M-r") 'replace-regexp)
 (define-key prog-mode-map (kbd "M-n") 'forward-paragraph)
 (define-key prog-mode-map (kbd "M-p") 'backward-paragraph)
 
@@ -150,9 +163,6 @@
 (bind-key* "M-m h u" 'unhighlight-regexp)
 (bind-key* "M-m h ." 'highlight-symbol-at-point)
 
-(global-auto-highlight-symbol-mode)
-(ahs-set-idle-interval 0.001)
-
 (defun save-and-format-buffer ()
   (interactive)
   (clang-format-buffer)
@@ -160,19 +170,8 @@
 (add-hook 'c++-mode-hook
           (lambda () (local-set-key (kbd "C-x C-s") 'save-and-format-buffer)))
 
-(defun copy-all-or-region ()
-  (interactive)
-  (if (use-region-p)
-      (progn
-        (kill-new (buffer-substring (region-beginning) (region-end)))
-        (message "Copied selection.")
-        (deactivate-mark))
-    (progn
-      (kill-new (buffer-string))
-      (message "Copied buffer."))))
-
-(after! flycheck
-  (setq flycheck-global-modes '(not c-mode c++-mode)))
+;; (after! flycheck
+;;   (setq flycheck-global-modes '(not c-mode c++-mode)))
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
@@ -261,6 +260,12 @@
   :config
   (setf (cdr (assoc 'prog-mode +company-backend-alist)) '(company-capf)))
 
+;; auto-highlighting-mode
+(use-package auto-highlight-symbol
+  :config
+  (global-auto-highlight-symbol-mode 1)
+  (setq ahs-idle-interval 0.0001))
+
 ;; lisp
 (use-package slime
   :config
@@ -271,6 +276,8 @@
   (define-key slime-mode-map (kbd "C-M-e") 'slime-end-of-defun)
   (define-key slime-mode-map (kbd "M-p") 'backward-paragraph)
   (define-key slime-mode-map (kbd "M-n") 'forward-paragraph)
+  (define-key slime-mode-map (kbd "M-r") nil)
+  (define-key slime-repl-mode-map (kbd "M-r") nil)
   )
 
 (use-package composite
