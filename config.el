@@ -121,8 +121,9 @@
 
 (use-package paredit
   :config
-  (define-key paredit-mode-map (kbd "C-j") ())
-  (define-key paredit-mode-map (kbd "C-h") 'paredit-backward-delete))
+    (define-key paredit-mode-map (kbd "C-j") nil)
+    (define-key paredit-mode-map (kbd "C-m") nil)
+    (define-key paredit-mode-map (kbd "C-h") 'paredit-backward-delete))
 
 (defun u-lisp-config ()
   (smartparens-mode -1)
@@ -138,7 +139,6 @@
 (add-hook 'minibuffer-setup-hook 'u-minibuffer-setup)
 (add-hook 'lisp-mode-hook 'u-lisp-config)
 (add-hook 'emacs-lisp-mode-hook 'u-lisp-config)
-(add-hook 'slime-mode-hook 'u-lisp-config)
 (add-hook 'inferior-scheme-mode-hook 'u-lisp-config)
 
 (define-key emacs-lisp-mode-map (kbd "C-j") 'eval-print-last-sexp)
@@ -258,13 +258,13 @@
 ;; company
 (use-package company
   :config
-  (setf (cdr (assoc 'prog-mode +company-backend-alist)) '(company-capf)))
+  (setf (cdr (assoc 'prog-mode +company-backend-alist)) '(company-capf company-files)))
 
 ;; auto-highlighting-mode
 (use-package auto-highlight-symbol
   :config
   (global-auto-highlight-symbol-mode 1)
-  (setq ahs-idle-interval 0.0001))
+  (setq ahs-idle-interval 0))
 
 ;; lisp
 (use-package slime
@@ -272,6 +272,9 @@
   ;; (setq-default company-backends (cons 'company-slime (remove 'company-slime company-backends)))
   (setq-default inferior-lisp-program "sbcl")
   (slime-setup '(slime-company slime-fancy slime-quicklisp slime-asdf slime-media slime-parse slime-mrepl))
+  (add-hook 'slime-mode-hook 'u-lisp-config)
+  (add-hook 'slime-repl-mode-hook 'u-lisp-config)
+
   (define-key slime-mode-map (kbd "C-M-a") 'slime-beginning-of-defun)
   (define-key slime-mode-map (kbd "C-M-e") 'slime-end-of-defun)
   (define-key slime-mode-map (kbd "M-p") 'backward-paragraph)
@@ -279,6 +282,39 @@
   (define-key slime-mode-map (kbd "M-r") nil)
   (define-key slime-repl-mode-map (kbd "M-r") nil)
   )
+
+(use-package org-download
+  :ensure t
+  :after org
+  :config
+  (setq-default
+   org-download-image-dir "assets"
+   ;; Basename setting seems to be simply ignored.
+   org-download-screenshot-basename ".org.png"
+   org-download-timestamp "org_%Y%m%d-%H%M%S_"
+   org-download-heading-lvl nil)
+  (defun paste-screenshot-to-telega ()
+      (interactive)
+    (shell-command-to-string
+     (format org-download-screenshot-method
+             org-download-screenshot-file))
+    (let ((file  "/tmp/screenshot.png")
+          (as-file-p current-prefix-arg))
+      (telega-buffer-file-send
+       file (telega-completing-read-chat
+             (format "Send %s(%s) to chat: "
+                     (cond ((listp file)
+                            (format "%d FILES" (length file)))
+                           (t "FILE"))
+                     (if as-file-p
+                         "as file"
+                       "autodetect"))))))
+  (global-set-key (kbd "C-M-y") 'paste-screenshot-to-telega)
+  :custom
+  (org-download-screenshot-method
+   (cond
+    ((eq system-type 'gnu/linux)
+     "xclip -selection clipboard -t image/png -o > '%s'"))))
 
 (use-package composite
   :defer t
