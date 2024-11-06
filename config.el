@@ -69,6 +69,7 @@
       (kill-new (buffer-string))
       (message "Copied buffer."))))
 
+
 (global-set-key (kbd "M-w") 'copy-all-or-region)
 (global-set-key (kbd "C-h") 'backward-delete-char-untabify)
 (global-set-key (kbd "C-a") 'beginning-of-visual-line)
@@ -123,7 +124,8 @@
   :config
     (define-key paredit-mode-map (kbd "C-j") nil)
     (define-key paredit-mode-map (kbd "C-m") nil)
-    (define-key paredit-mode-map (kbd "C-h") 'paredit-backward-delete))
+    (define-key paredit-mode-map (kbd "C-h") 'paredit-backward-delete)
+    (define-key paredit-mode-map (kbd "<backspace>") 'paredit-backward-delete))
 
 (defun u-lisp-config ()
   (smartparens-mode -1)
@@ -274,6 +276,7 @@
   (slime-setup '(slime-company slime-fancy slime-quicklisp slime-asdf slime-media slime-parse slime-mrepl))
   (add-hook 'slime-mode-hook 'u-lisp-config)
   (add-hook 'slime-repl-mode-hook 'u-lisp-config)
+  (bind-key* (kbd "M-t M-s") 'slime-repl)
 
   (define-key slime-mode-map (kbd "C-M-a") 'slime-beginning-of-defun)
   (define-key slime-mode-map (kbd "C-M-e") 'slime-end-of-defun)
