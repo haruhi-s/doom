@@ -38,7 +38,7 @@
 ;; `load-theme' function. This is the default:
 ;; (setq doom-theme 'doom-horizon)
 
-(setq doom-theme 'doom-gruvbox)
+(setq doom-theme 'doom-plain)
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq-default indent-tabs-mode nil)
@@ -122,10 +122,11 @@
 
 (use-package paredit
   :config
-    (define-key paredit-mode-map (kbd "C-j") nil)
-    (define-key paredit-mode-map (kbd "C-m") nil)
-    (define-key paredit-mode-map (kbd "C-h") 'paredit-backward-delete)
-    (define-key paredit-mode-map (kbd "<backspace>") 'paredit-backward-delete))
+  (advice-add 'paredit-kill :after 'fixup-whitespace)
+  (define-key paredit-mode-map (kbd "C-j") nil)
+  (define-key paredit-mode-map (kbd "C-m") nil)
+  (define-key paredit-mode-map (kbd "C-h") 'paredit-backward-delete)
+  (define-key paredit-mode-map (kbd "<backspace>") 'paredit-backward-delete))
 
 (defun u-lisp-config ()
   (smartparens-mode -1)
@@ -267,6 +268,10 @@
   :config
   (global-auto-highlight-symbol-mode 1)
   (setq ahs-idle-interval 0))
+
+(use-package undo-tree
+  :config
+  (global-undo-tree-mode))
 
 ;; lisp
 (use-package slime
