@@ -97,6 +97,9 @@
   )
 
 (bind-key* "M-m b s" 'scratch-buffer)
+(bind-key* "C-(" 'split-window-horizontally)
+(bind-key* "C--" 'split-window-vertically)
+(bind-key* "C-W" 'delete-window)
 
 (winum-mode)
 (bind-key* "M-m w d" 'delete-window)
