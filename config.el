@@ -38,7 +38,7 @@
 ;; `load-theme' function. This is the default:
 ;; (setq doom-theme 'doom-horizon)
 
-(setq doom-theme 'doom-plain)
+(setq doom-theme 'doom-1337)
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq-default indent-tabs-mode nil)
@@ -89,17 +89,20 @@
           (lambda ()
             (define-key global-map (kbd "C-c t") telega-prefix-map)))
 
+(use-package apel)
+
 (use-package swiper
   :config
   (global-set-key (kbd "M-t") 'swiper-thing-at-point)
   (global-set-key (kbd "C-s") 'swiper-isearch)
-  (global-set-key (kbd "C-r") 'swiper-isearch-backward)
-  )
+  (global-set-key (kbd "C-r") 'swiper-isearch-backward))
 
 (bind-key* "M-m b s" 'scratch-buffer)
+(setq-default initial-major-mode 'lisp-interaction-mode)
 (bind-key* "C-(" 'split-window-horizontally)
 (bind-key* "C--" 'split-window-vertically)
 (bind-key* "C-W" 'delete-window)
+(bind-key* "C-w" 'kill-region)
 
 (winum-mode)
 (bind-key* "M-m w d" 'delete-window)
@@ -264,7 +267,8 @@
 ;; company
 (use-package company
   :config
-  (setf (cdr (assoc 'prog-mode +company-backend-alist)) '(company-capf company-files)))
+  (setf (cdr (assoc 'prog-mode +company-backend-alist)) '(company-capf company-files))
+  (setq company-global-modes '(not org-mode)))
 
 ;; auto-highlighting-mode
 (use-package auto-highlight-symbol
@@ -293,6 +297,13 @@
   (define-key slime-mode-map (kbd "M-r") nil)
   (define-key slime-repl-mode-map (kbd "M-r") nil)
   )
+
+(use-package slime-repl
+  :bind (:map slime-repl-mode-map
+              ("M-r")
+              ("M-s")
+              ("C-s" . consult-history)
+              ("C-r" . consult-history)))
 
 (use-package org-download
   :ensure t
@@ -377,3 +388,5 @@
   :config
   (define-key image-mode-map (kbd "=") 'image-increase-size)
   (define-key image-mode-map (kbd "-") 'image-decrease-size))
+
+;; (mapcar #'disable-theme custom-enabled-themes)
